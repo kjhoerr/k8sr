@@ -1,0 +1,7 @@
+[package]
+name = "k8sr"
+version = "0.1.0"
+authors = ["khoerr"]
+
+[dependencies]
+rocket = "0.4.0-rc.1"
