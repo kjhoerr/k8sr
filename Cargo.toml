@@ -1,7 +1,17 @@
 [package]
 name = "k8sr"
 version = "0.1.0"
-authors = ["khoerr"]
+authors = ["Kevin J Hoerr <kjhoerr@submelon.tech>"]
+
+[[bin]]
+name = "k8sr0"
+path = "src/main.rs"
 
 [dependencies]
 rocket = "0.4.0-rc.1"
+gauc = "0.8.1"
+
+dotenv = "0.10"
+env_logger = "0.5"
+failure = "^0.1"
+log = "0.4"
