@@ -1,44 +1,23 @@
-#![feature(proc_macro_hygiene, decl_macro)]
-
-extern crate dotenv;
-extern crate env_logger;
-extern crate failure;
-#[macro_use] extern crate log;
-#[macro_use] extern crate rocket;
-extern crate gauc;
 
 pub mod error;
 
+use rocket::Route;
 use dotenv::dotenv;
 use failure::Error;
 use gauc::client::*;
 use std::env;
-use error::CouchbaseError;
+use self::error::CouchbaseError;
 
-#[get("/status")]
-fn index () -> String {
-    format!("k8sr0 server up")
-}
-
-fn main () {
-    env_logger::init();
-
-    if let Err(ref e) = run() {
-        error!("error: {}", e);
-
-        ::std::process::exit(1);
-    }
-}
-
-fn run() -> Result<(), Error> {
+pub fn run<R: Into<Vec<Route>>, F>(routes: F) -> Result<(), Error>
+where F: Fn(Client) -> R {
     dotenv().ok();
 
     let cb_conn = &get_cb_conn()?;
     let cb_auth = get_cb_auth().ok();
-    let mut _couchbase = Client::connect(cb_conn, cb_auth)
+    let couchbase = Client::connect(cb_conn, cb_auth)
         .map_err(CouchbaseError::new)?;
 
-    rocket::ignite().mount("/", routes![index]).launch();
+    rocket::ignite().mount("/", routes(couchbase)).launch();
 
     Ok(())
 }

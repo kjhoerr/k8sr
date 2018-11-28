@@ -5,7 +5,7 @@ authors = ["Kevin J Hoerr <kjhoerr@submelon.tech>"]
 
 [[bin]]
 name = "k8sr0"
-path = "src/main.rs"
+path = "src/k8sr0.rs"
 
 [dependencies]
 rocket = "0.4.0-rc.1"
