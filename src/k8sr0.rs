@@ -9,13 +9,20 @@ extern crate gauc;
 
 pub mod app;
 
+use dotenv::dotenv;
+use std::env;
+
 #[get("/status")]
 fn index () -> String {
-    format!("k8sr0 server up")
+    let hostname = env::var("HOSTNAME")
+        .unwrap_or("untitled".to_string());
+
+    format!("k8sr0 server '{}' up", hostname)
 }
 
 fn main () {
     env_logger::init();
+    dotenv().ok();
 
     if let Err(ref e) = app::run(|_| routes![index]) {
         error!("error: {}", e);

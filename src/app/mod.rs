@@ -2,7 +2,6 @@
 pub mod error;
 
 use rocket::Route;
-use dotenv::dotenv;
 use failure::Error;
 use gauc::client::*;
 use std::env;
@@ -10,8 +9,6 @@ use self::error::CouchbaseError;
 
 pub fn run<R: Into<Vec<Route>>, F>(routes: F) -> Result<(), Error>
 where F: Fn(Client) -> R {
-    dotenv().ok();
-
     let cb_conn = &get_cb_conn()?;
     let cb_auth = get_cb_auth().ok();
     let couchbase = Client::connect(cb_conn, cb_auth)
