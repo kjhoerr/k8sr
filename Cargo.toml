@@ -7,8 +7,12 @@ authors = ["Kevin J Hoerr <kjhoerr@submelon.tech>"]
 name = "k8sr0"
 path = "src/k8sr0.rs"
 
+[[bin]]
+name = "k8sr1"
+path = "src/k8sr1.rs"
+
 [dependencies]
-rocket = "0.4.0-rc.1"
+rocket = "0.4.0-rc.2"
 gauc = "0.8.1"
 
 dotenv = "0.10"

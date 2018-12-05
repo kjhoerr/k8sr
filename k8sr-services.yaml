@@ -1,0 +1,89 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    k8s-app: k8sr
+  name: k8sr-ui
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      k8s-app: k8sr
+  template:
+    metadata:
+      labels:
+        k8s-app: k8sr
+      name: k8sr-ui
+    spec:
+      containers:
+      - env:
+        - name: COUCHBASE_HOST
+          value: cb-k8sr-srv
+        - name: COUCHBASE_BUCKET
+          value: k8sr
+        - name: COUCHBASE_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: cb-example-auth
+              key: username
+        - name: COUCHBASE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: cb-example-auth
+              key: password
+        - name: HOSTNAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        image: kjhoerr/k8sr0:v0.1.0
+        imagePullPolicy: Always
+        name: k8sr-ui
+        ports:
+        - containerPort: 8000
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    k8s-app: k8sr-euphemus
+  name: k8sr-euphemus
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      k8s-app: k8sr-euphemus
+  template:
+    metadata:
+      labels:
+        k8s-app: k8sr-euphemus
+      name: k8sr-euphemus
+    spec:
+      containers:
+      - env:
+        - name: COUCHBASE_HOST
+          value: cb-k8sr-srv
+        - name: COUCHBASE_BUCKET
+          value: k8sr
+        - name: COUCHBASE_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: cb-example-auth
+              key: username
+        - name: COUCHBASE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: cb-example-auth
+              key: password
+        - name: HOSTNAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        image: kjhoerr/k8sr1:v0.1.0
+        imagePullPolicy: Always
+        name: k8sr1
+        ports:
+        - containerPort: 8000
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30

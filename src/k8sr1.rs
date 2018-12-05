@@ -17,19 +17,14 @@ fn status () -> String {
     let hostname = env::var("HOSTNAME")
         .unwrap_or("untitled".to_string());
 
-    format!("k8sr0 server '{}' up", hostname)
-}
-
-#[get("/")]
-fn index () -> String {
-    "ha ha".to_string()
+    format!("k8sr1 server '{}' up", hostname)
 }
 
 fn main () {
     env_logger::init();
     dotenv().ok();
 
-    if let Err(ref e) = app::run(|_| routes![status, index]) {
+    if let Err(ref e) = app::run(|_| routes![status]) {
         error!("error: {}", e);
 
         ::std::process::exit(1);
