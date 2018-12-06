@@ -1,6 +1,6 @@
 [package]
 name = "k8sr"
-version = "0.2.2"
+version = "0.2.3"
 authors = ["Kevin J Hoerr <kjhoerr@submelon.tech>"]
 
 [[bin]]
@@ -13,6 +13,7 @@ path = "src/k8sr1.rs"
 
 [dependencies]
 rocket = "0.4.0-rc.2"
+reqwest = "0.9.5"
 gauc = "0.8.1"
 
 rocket_contrib = "0.4.0-rc.2"

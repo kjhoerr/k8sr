@@ -5,6 +5,7 @@ extern crate env_logger;
 extern crate failure;
 #[macro_use] extern crate log;
 #[macro_use] extern crate rocket;
+extern crate reqwest;
 extern crate rocket_contrib;
 #[macro_use] extern crate serde_derive;
 extern crate gauc;
@@ -12,7 +13,6 @@ extern crate gauc;
 pub mod app;
 pub mod message;
 
-use rocket::local::Client;
 use rocket_contrib::json::Json;
 use message::{Status, StatusFE};
 use dotenv::dotenv;
@@ -37,10 +37,10 @@ fn status () -> Json<StatusFE> {
 }
 
 fn do_thing(host: String) -> Option<Status> {
-    let client = Client::new(rocket::ignite()).expect("valid rocket");
-    let req = client.get(format!("http://{}/status", host))
-        .dispatch()
-        .body_string();
+    let req = reqwest::get(format!("http://{}/status", host).as_str())
+        .ok()?
+        .text()
+        .ok();
 
     match req {
         Some(s) => {
