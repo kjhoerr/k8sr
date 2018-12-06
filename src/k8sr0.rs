@@ -38,8 +38,7 @@ fn status () -> Json<StatusFE> {
 
 fn do_thing(host: String) -> Option<Status> {
     let client = Client::new(rocket::ignite()).expect("valid rocket");
-    let req = client.get("/status")
-        .remote(host.parse().unwrap())
+    let req = client.get(format!("http://{}/status", host))
         .dispatch()
         .body_string();
 

@@ -32,12 +32,12 @@ spec:
               name: cb-example-auth
               key: password
         - name: EUPHEMUS_HOST
-          value: k8sr-euphemus-srv.default.srv.cluster.local
+          value: k8sr-euphemus-srv
         - name: HOSTNAME
           valueFrom:
             fieldRef:
               fieldPath: metadata.name
-        image: kjhoerr/k8sr0:v0.2.0
+        image: kjhoerr/k8sr0:v0.2.2
         imagePullPolicy: Always
         name: k8sr-ui
         ports:
