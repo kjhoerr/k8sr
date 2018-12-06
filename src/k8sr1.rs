@@ -29,6 +29,11 @@ fn status () -> Json<Status> {
     })
 }
 
+#[get("/list/values")]
+fn list () -> String {
+    "{\"message\":\"ha ha\"}".to_string()
+}
+
 fn main () {
     env_logger::init();
     dotenv().ok();

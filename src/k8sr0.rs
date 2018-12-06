@@ -38,9 +38,7 @@ fn status () -> Json<StatusFE> {
 
 fn do_thing(host: String) -> Option<Status> {
     let req = reqwest::get(format!("http://{}/status", host).as_str())
-        .ok()?
-        .text()
-        .ok();
+        .ok()?.text().ok();
 
     match req {
         Some(s) => {
@@ -56,7 +54,11 @@ fn do_thing(host: String) -> Option<Status> {
 
 #[get("/")]
 fn index () -> String {
-    "ha ha".to_string()
+    let host = env::var("EUPHEMUS_HOST")
+        .expect("Other server must be configured");
+
+    reqwest::get(format!("http://{}/list/values", host).as_str())
+        .unwrap().text().unwrap()
 }
 
 fn main () {
