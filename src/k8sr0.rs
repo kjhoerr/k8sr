@@ -5,19 +5,48 @@ extern crate env_logger;
 extern crate failure;
 #[macro_use] extern crate log;
 #[macro_use] extern crate rocket;
+extern crate rocket_contrib;
+#[macro_use] extern crate serde_derive;
 extern crate gauc;
 
 pub mod app;
+pub mod message;
 
+use rocket::local::Client;
+use rocket_contrib::json::Json;
+use message::{Status, StatusFE};
 use dotenv::dotenv;
 use std::env;
 
 #[get("/status")]
-fn status () -> String {
+fn status () -> Json<StatusFE> {
     let hostname = env::var("HOSTNAME")
         .unwrap_or("untitled".to_string());
 
-    format!("k8sr0 server '{}' up", hostname)
+    let stream = match env::var("EUPHEMUS_HOST") {
+        Ok(host) => do_thing(host),
+        Err(_) => None
+    };
+
+    Json(StatusFE {
+        name: "k8sr0".to_string(),
+        hostname: hostname,
+        is_up: true,
+        leaf: stream.into_iter().collect()
+    })
+}
+
+fn do_thing(host: String) -> Option<Status> {
+    let client = Client::new(rocket::ignite()).expect("valid rocket");
+    let req = client.get("/status")
+        .remote(host.parse().unwrap())
+        .dispatch()
+        .body_string();
+
+    match req {
+        Some(s) => serde_json::from_str(&s[..]).ok(),
+        None => None
+    }
 }
 
 #[get("/")]

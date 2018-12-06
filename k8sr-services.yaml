@@ -31,11 +31,13 @@ spec:
             secretKeyRef:
               name: cb-example-auth
               key: password
+        - name: EUPHEMUS_HOST
+          value: k8sr-euphemus-srv
         - name: HOSTNAME
           valueFrom:
             fieldRef:
               fieldPath: metadata.name
-        image: kjhoerr/k8sr0:v0.1.0
+        image: kjhoerr/k8sr0:v0.2.0
         imagePullPolicy: Always
         name: k8sr-ui
         ports:
@@ -80,10 +82,24 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.name
-        image: kjhoerr/k8sr1:v0.1.0
+        image: kjhoerr/k8sr1:v0.2.0
         imagePullPolicy: Always
         name: k8sr1
         ports:
         - containerPort: 8000
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    k8s-app: k8sr-euphemus
+  name: k8sr-euphemus-srv
+spec:
+  selector:
+    k8s-app: k8sr-euphemus
+  ports:
+    - port: 8000
+      targetPort: 8000
+      name: k8sr-euphemus
