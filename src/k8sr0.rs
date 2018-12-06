@@ -44,8 +44,14 @@ fn do_thing(host: String) -> Option<Status> {
         .body_string();
 
     match req {
-        Some(s) => serde_json::from_str(&s[..]).ok(),
-        None => None
+        Some(s) => {
+            warn!("request fulfilled: {}", s);
+            serde_json::from_str(s.as_str()).ok()
+        },
+        None => {
+            warn!("request not fulfilled");
+            None
+        }
     }
 }
 

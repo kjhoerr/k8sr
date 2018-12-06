@@ -32,7 +32,7 @@ spec:
               name: cb-example-auth
               key: password
         - name: EUPHEMUS_HOST
-          value: k8sr-euphemus-srv
+          value: k8sr-euphemus-srv.default.srv.cluster.local
         - name: HOSTNAME
           valueFrom:
             fieldRef:
@@ -100,6 +100,6 @@ spec:
   selector:
     k8s-app: k8sr-euphemus
   ports:
-    - port: 8000
+    - port: 80
       targetPort: 8000
       name: k8sr-euphemus
